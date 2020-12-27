@@ -4,7 +4,7 @@ import shutil
 from PIL import Image
 from inky.inky_uc8159 import Inky
 from images_in_dir import get_image_choice
-from inky_utility import set_image_and_show
+from inky_utility import set_image_and_show, rotate_and_crop_image
 
 inky = Inky()
 
@@ -31,25 +31,13 @@ def set_random_image():
 
 
 @app.put("/images/crop/{image_name}")
-def rotate_and_crop_image(image_name: str):
-    image_path = ORIGINAL_IMAGE_DIR + image_name
-    original_image = Image.open(image_path)
-    rotated_image = original_image.rotate(270, expand=True)
-    size = rotated_image.size
-    box = (
-        size[0] / 2 - INKY_SCREEN_RESOLUTION[0] / 2,
-        size[1] / 2 - INKY_SCREEN_RESOLUTION[1] / 2,
-        size[0] / 2 + INKY_SCREEN_RESOLUTION[0] / 2,
-        size[1] / 2 + INKY_SCREEN_RESOLUTION[1] / 2
-    )
-    smaller_rotated_image = rotated_image.crop(box)
-    image_name_split = image_name.split('.')
-    smaller_rotated_image.save(ADJUSTED_IMAGE_DIR + image_name_split[0] + '_cropped_rotated.' + image_name_split[1])
-    return {"message": "sucessfully created " + image_name_split[0] + '_cropped_rotated.' + image_name_split[1]}
+def crop_image_for_inky(image_name: str):
+    new_name = rotate_and_crop_image(image_name, ORIGINAL_IMAGE_DIR, ADJUSTED_IMAGE_DIR)
+    return {"message": "sucessfully created " + new_name}
 
 
 @app.put("/images/resize/{image_name}")
-def rotate_and_crop_image(image_name: str):
+def resize_image_for_inky(image_name: str):
     image_path = ORIGINAL_IMAGE_DIR + image_name
     original_image = Image.open(image_path)
     rotated_image = original_image.rotate(270, expand=True)
