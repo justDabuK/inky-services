@@ -1,10 +1,9 @@
 from os import listdir
 from fastapi import FastAPI, File, UploadFile
 import shutil
-from PIL import Image
 from inky.inky_uc8159 import Inky
 from images_in_dir import get_image_choice
-from inky_utility import set_image_and_show, rotate_and_crop_image
+from inky_utility import set_image_and_show, rotate_and_crop_image, rotate_and_resize
 
 inky = Inky()
 
@@ -38,13 +37,8 @@ def crop_image_for_inky(image_name: str):
 
 @app.put("/images/resize/{image_name}")
 def resize_image_for_inky(image_name: str):
-    image_path = ORIGINAL_IMAGE_DIR + image_name
-    original_image = Image.open(image_path)
-    rotated_image = original_image.rotate(270, expand=True)
-    smaller_rotated_image = rotated_image.resize(INKY_SCREEN_RESOLUTION)
-    image_name_split = image_path.split('.')
-    smaller_rotated_image.save(ADJUSTED_IMAGE_DIR + image_name_split[0] + '_resized_rotated.' + image_name_split[1])
-    return {"message": "sucessfully created " + image_name_split[0] + '_resized_rotated.' + image_name_split[1]}
+    new_name = rotate_and_resize(image_name, ORIGINAL_IMAGE_DIR, ADJUSTED_IMAGE_DIR)
+    return {"message": "sucessfully created " + new_name}
 
 
 @app.post("/uploadfile/")

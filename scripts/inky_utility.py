@@ -25,3 +25,14 @@ def rotate_and_crop_image(image_name, input_dir="", output_dir=""):
     output_path = output_dir + image_name_split[0] + '_cropped_rotated.' + image_name_split[1]
     smaller_rotated_image.save(output_path)
     return output_path
+
+
+def rotate_and_resize(image_name, input_dir="", output_dir=""):
+    image_path = input_dir + image_name
+    original_image = Image.open(image_path)
+    rotated_image = original_image.rotate(270, expand=True)
+    smaller_rotated_image = rotated_image.resize(INKY_SCREEN_RESOLUTION)
+    image_name_split = image_path.split('.')
+    output_path = output_dir + image_name_split[0] + '_resized_rotated.' + image_name_split[1]
+    smaller_rotated_image.save(output_path)
+    return output_path
