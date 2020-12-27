@@ -4,9 +4,9 @@ import shutil
 from PIL import Image
 from inky.inky_uc8159 import Inky
 from images_in_dir import get_image_choice
+from inky_utility import set_image_and_show
 
 inky = Inky()
-saturation = 0.5
 
 app = FastAPI()
 
@@ -18,24 +18,16 @@ INKY_SCREEN_RESOLUTION = (600, 448)
 @app.put("/images/set/{image_name}")
 def set_image(image_name: str):
     print("going to set " + image_name)
-    image = Image.open(ADJUSTED_IMAGE_DIR + image_name)
-
-    inky.set_image(image, saturation=saturation)
-    inky.show()
-
+    set_image_and_show(inky, ADJUSTED_IMAGE_DIR + image_name)
     return {"message": "set " + image_name + " successfully"}
 
 
 @app.put("/images/set/random/")
 def set_random_image():
-    image_name = get_image_choice(ADJUSTED_IMAGE_DIR)
-    print("going to set " + image_name)
-    image = Image.open(image_name)
-
-    inky.set_image(image, saturation=saturation)
-    inky.show()
-
-    return {"message": "set " + image_name + " successfully"}
+    image_path = get_image_choice(ADJUSTED_IMAGE_DIR)
+    print("going to set " + image_path)
+    set_image_and_show(inky, image_path)
+    return {"message": "set " + image_path + " successfully"}
 
 
 @app.put("/images/crop/{image_name}")
@@ -53,6 +45,7 @@ def rotate_and_crop_image(image_name: str):
     smaller_rotated_image = rotated_image.crop(box)
     image_name_split = image_name.split('.')
     smaller_rotated_image.save(ADJUSTED_IMAGE_DIR + image_name_split[0] + '_cropped_rotated.' + image_name_split[1])
+    return {"message": "sucessfully created " + image_name_split[0] + '_cropped_rotated.' + image_name_split[1]}
 
 
 @app.put("/images/resize/{image_name}")
@@ -63,10 +56,11 @@ def rotate_and_crop_image(image_name: str):
     smaller_rotated_image = rotated_image.resize(INKY_SCREEN_RESOLUTION)
     image_name_split = image_path.split('.')
     smaller_rotated_image.save(ADJUSTED_IMAGE_DIR + image_name_split[0] + '_resized_rotated.' + image_name_split[1])
+    return {"message": "sucessfully created " + image_name_split[0] + '_resized_rotated.' + image_name_split[1]}
 
 
 @app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile = File(...)):
+async def upload_file(file: UploadFile = File(...)):
     if "image" in file.content_type:
         with open(ORIGINAL_IMAGE_DIR + file.filename, "wb") as local_file:
             shutil.copyfileobj(file.file, local_file)
