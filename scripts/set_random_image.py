@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-
 import sys
-
-from PIL import Image
 from inky.inky_uc8159 import Inky
 from images_in_dir import get_image_choice
+from inky_utility import set_image_and_show
 
 inky = Inky()
-saturation = 0.5
 
 if len(sys.argv) == 1:
     print("""
@@ -17,10 +14,4 @@ Usage: {file} image-directory
 
 choice = get_image_choice(sys.argv[1])
 print("going to set " + choice)
-image = Image.open(choice)
-
-if len(sys.argv) > 2:
-    saturation = float(sys.argv[2])
-
-inky.set_image(image, saturation=saturation)
-inky.show()
+set_image_and_show(inky, choice)
