@@ -42,3 +42,6 @@ Then add these two lines at the end of the file.
 
     @reboot /home/pi/.local/bin/uvicorn --app-dir /home/pi/DaBu/inky/scripts --host 0.0.0.0 inky_service:app > /home/pi/logs/inky_service.logs 2>&1
     0 *  *   *   *     python3 /home/pi/DaBu/inky/scripts/set_random_image.py /home/pi/Pictures/adjusted/
+
+# Usage
+A swagger UI will be available under `<ip_adress>:8000/docs`.
