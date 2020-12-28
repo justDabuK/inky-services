@@ -1,5 +1,7 @@
 from os import listdir
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+
 import shutil
 from inky.inky_uc8159 import Inky
 from images_in_dir import get_image_choice
@@ -8,6 +10,14 @@ from inky_utility import set_image_and_show, rotate_and_crop_image, rotate_and_r
 inky = Inky()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 ADJUSTED_IMAGE_DIR = "/home/pi/Pictures/adjusted/"
 ORIGINAL_IMAGE_DIR = "/home/pi/Pictures/originals/"
