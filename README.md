@@ -13,12 +13,13 @@ Required installations on the running pi:
 - [FastAPI](https://fastapi.tiangolo.com/) for the service-endpoints
 - [Uvicorn](https://www.uvicorn.org/) to run the server offering the endpoints
 - [Python-Multipart](https://pypi.org/project/python-multipart/) to be able to handle files sended to the endpoints
-
+- [aiofiles](https://pypi.org/project/aiofiles/) to be able to return downloadable files
 
     curl https://get.pimoroni.com/inky | bash
     pip3 install fastapi
     pip3 install uvicorn
     pip3 install python-multipart
+    pip3 install aiofiles
 
 # Install
 prepare the `DaBu` directory and clone this repo into the directory
@@ -40,8 +41,8 @@ To make the `inky_service` start at reboot and to make the screen switch the ima
 
 Then add these two lines at the end of the file.
 
-    @reboot /home/pi/.local/bin/uvicorn --app-dir /home/pi/DaBu/inky/scripts --host 0.0.0.0 inky_service:app > /home/pi/logs/inky_service.logs 2>&1
-    0 *  *   *   *     python3 /home/pi/DaBu/inky/scripts/set_random_image.py /home/pi/Pictures/adjusted/
+    @reboot /home/pi/.local/bin/uvicorn --app-dir /home/pi/DaBu/inky-services/scripts --host 0.0.0.0 inky_service:app > /home/pi/logs/inky_service.logs 2>&1
+    0 *  *   *   *     python3 /home/pi/DaBu/inky-services/scripts/set_random_image.py /home/pi/Pictures/adjusted/
 
 # Usage
 A swagger UI will be available under `<ip_adress>:8000/docs`.
