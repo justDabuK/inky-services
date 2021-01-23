@@ -1,4 +1,4 @@
-# Inky
+# Inky-Services
 Scripts to control [Inky Impression](https://shop.pimoroni.com/products/inky-impression), a 7 color ePaper.
 
 These instructions are written for a raspberry pi.

@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import shutil
 from inky.inky_uc8159 import Inky
+from starlette.responses import FileResponse
+
 from images_in_dir import get_image_choice
 from inky_utility import set_image_and_show, rotate_and_crop_image, rotate_and_resize
 
@@ -62,12 +64,28 @@ async def upload_file(file: UploadFile = File(...)):
 
 
 @app.get("/images/original/")
-def get_images():
+def get_original_images():
     file_list = listdir(ORIGINAL_IMAGE_DIR)
     return file_list
 
 
 @app.get("/images/adjusted/")
-def get_images():
+def get_adjusted_images():
     file_list = listdir(ADJUSTED_IMAGE_DIR)
     return file_list
+
+
+@app.get("/images/adjusted/get/{image_name}/download")
+def get_adjusted_image_file(image_name: str):
+    try:
+        return FileResponse(ADJUSTED_IMAGE_DIR + image_name, media_type='application/octet-stream', filename=image_name)
+    except Exception as e:
+        return {"success": False, "reason": e.__cause__}
+
+
+@app.get("/images/original/get/{image_name}/download")
+def get_original_image_file(image_name: str):
+    try:
+        return FileResponse(ORIGINAL_IMAGE_DIR + image_name, media_type='application/octet-stream', filename=image_name)
+    except Exception as e:
+        return {"success": False, "reason": e.__cause__}
