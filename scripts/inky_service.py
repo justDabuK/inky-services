@@ -80,6 +80,7 @@ def get_adjusted_image_file(image_name: str):
     try:
         return FileResponse(ADJUSTED_IMAGE_DIR + image_name, media_type='application/octet-stream', filename=image_name)
     except Exception as e:
+        print(e)
         return {"success": False, "reason": e.__cause__}
 
 
@@ -88,4 +89,5 @@ def get_original_image_file(image_name: str):
     try:
         return FileResponse(ORIGINAL_IMAGE_DIR + image_name, media_type='application/octet-stream', filename=image_name)
     except Exception as e:
+        print(e)
         return {"success": False, "reason": e.__cause__}
