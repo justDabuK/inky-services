@@ -1,6 +1,8 @@
 from PIL import Image
+from inky.auto import auto
 
-INKY_SCREEN_RESOLUTION = (600, 448)
+display = auto()
+INKY_SCREEN_RESOLUTION = display.resolution
 
 
 def set_image_and_show(inky, image_path, saturation=0.5):

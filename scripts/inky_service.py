@@ -3,13 +3,13 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 import shutil
-from inky.inky_uc8159 import Inky
+from inky.auto import auto
 from starlette.responses import FileResponse
 
 from images_in_dir import get_image_choice
 from inky_utility import set_image_and_show, rotate_and_crop_image, rotate_and_resize
 
-inky = Inky()
+inky = auto()
 
 app = FastAPI()
 
@@ -23,7 +23,7 @@ app.add_middleware(
 
 ADJUSTED_IMAGE_DIR = "/home/pi/Pictures/adjusted/"
 ORIGINAL_IMAGE_DIR = "/home/pi/Pictures/originals/"
-INKY_SCREEN_RESOLUTION = (600, 448)
+INKY_SCREEN_RESOLUTION = inky.resolution
 
 
 @app.put("/images/set/{image_name}")
@@ -91,3 +91,7 @@ def get_original_image_file(image_name: str):
     except Exception as e:
         print(e)
         return {"success": False, "reason": e.__cause__}
+
+@app.get("/screen/resolution")
+def get_screen_resolution():
+    return inky.resolution

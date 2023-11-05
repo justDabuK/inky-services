@@ -15,6 +15,7 @@ Required installations on the running pi:
 - [Python-Multipart](https://pypi.org/project/python-multipart/) to be able to handle files sended to the endpoints
 - [aiofiles](https://pypi.org/project/aiofiles/) to be able to return downloadable files
 
+
     curl https://get.pimoroni.com/inky | bash
     pip3 install fastapi
     pip3 install uvicorn
