@@ -7,7 +7,7 @@ from inky.auto import auto
 from starlette.responses import FileResponse
 
 from images_in_dir import get_image_choice
-from inky_utility import set_image_and_show, rotate_and_crop_image, rotate_and_resize
+from inky_utility import set_image_and_show, rotate_and_crop_image, rotate_and_resize, adjust_image
 
 inky = auto()
 
@@ -44,6 +44,12 @@ def set_random_image():
 @app.put("/images/crop/{image_name}")
 def crop_image_for_inky(image_name: str):
     new_name = rotate_and_crop_image(image_name, ORIGINAL_IMAGE_DIR, ADJUSTED_IMAGE_DIR)
+    return {"message": "sucessfully created " + new_name}
+
+
+@app.put("/images/adjust/{image_name}")
+def adjust_image_for_inky(image_name: str):
+    new_name = adjust_image(image_name, ORIGINAL_IMAGE_DIR, ADJUSTED_IMAGE_DIR)
     return {"message": "sucessfully created " + new_name}
 
 
@@ -91,6 +97,7 @@ def get_original_image_file(image_name: str):
     except Exception as e:
         print(e)
         return {"success": False, "reason": e.__cause__}
+
 
 @app.get("/screen/resolution")
 def get_screen_resolution():
