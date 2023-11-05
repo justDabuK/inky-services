@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import sys
-from inky.inky_uc8159 import Inky
+from inky.auto import auto
 from images_in_dir import get_image_choice
 from inky_utility import set_image_and_show
 
-inky = Inky()
+inky = auto()
 
 if len(sys.argv) == 1:
     print("""
