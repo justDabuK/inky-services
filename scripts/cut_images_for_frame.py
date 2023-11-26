@@ -8,6 +8,11 @@ PORTRAIT_SIZES = (480, 800)
 LANDSCAPE_SIZES = (800, 480)
 
 
+def sanitize_image_name(image_name):
+    replaced_image_name = image_name.replace(" ", "_").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
+    result = replaced_image_name.encode('UTF-8', 'strict').decode('UTF-8')
+    return result
+
 def is_landscape(image):
     image_width = image.size[0]
     image_height = image.size[1]
@@ -73,8 +78,19 @@ def main():
             resized_image = resize_image(image, PORTRAIT_SIZES)
             cropped_and_extend_image = rotate_crop_and_extend_image(resized_image)
         # see if crop or padding is needed
-        cropped_and_extend_image.save(ADJUSTED_IMAGE_DIR + image_name)
+        cropped_and_extend_image.save(ADJUSTED_IMAGE_DIR + sanitize_image_name(image_name))
         count += 1
+
+
+def find_non_utf_8_names():
+    image_name_list = listdir(ORIGINAL_IMAGE_DIR)
+    for image_name in image_name_list:
+        try:
+            sanitized_name = sanitize_image_name(image_name)
+            if sanitized_name != image_name:
+                print(image_name)
+        except UnicodeDecodeError:
+            print(image_name)
 
 
 if __name__ == "__main__":
