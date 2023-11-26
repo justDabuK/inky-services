@@ -20,8 +20,7 @@ def resize_image(image, size):
     # check which dimension is closest to goal size
     width_delta = abs(image_width - size[0])
     height_delta = abs(image_height - size[1])
-    # calculate divider
-    # TODO: should this be the smaller or larger delta?
+    # calculate divider -> take the smaller delta in order to crop the image by default instead of padding it
     divider = size[1] / image_height if (width_delta > height_delta) else size[0] / image_width
 
     # resize using original size * divider
