@@ -60,8 +60,8 @@ def rotate_crop_and_extend_image(original_image, desired_size):
 
 
 def adjust_image(image_path, desired_size):
-    inky_width = desired_size[0]
-    inky_height = desired_size[1]
+    inky_width = desired_size[1]
+    inky_height = desired_size[0]
 
     original_image = Image.open(image_path)
     original_image_width = original_image.size[0]
