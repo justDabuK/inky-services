@@ -64,20 +64,21 @@ def adjust_image(image_path, desired_size):
     inky_height = desired_size[1]
 
     original_image = Image.open(image_path)
-    image_width = original_image.size[0]
-    image_height = original_image.size[1]
+    original_image_width = original_image.size[0]
+    original_image_height = original_image.size[1]
 
     # resize image to fit the inky_width
-    width_multiplier = inky_width / image_width
-    original_image.resize((int(image_width * width_multiplier), int(image_height * width_multiplier)))
+    width_multiplier = inky_width / original_image_width
+    resized_image = original_image.resize(
+        (int(original_image_width * width_multiplier), int(original_image_height * width_multiplier)))
 
     # update image variables
-    image_width = original_image.size[0]
-    image_height = original_image.size[1]
+    resized_image_width = resized_image.size[0]
+    resized_image_height = resized_image.size[1]
 
-    if image_width >= inky_width and image_height >= inky_height:
-        return rotate_and_crop_image(original_image, desired_size)
-    elif image_width <= inky_width and image_height <= inky_height:
-        return rotate_and_extend_image(original_image, desired_size)
+    if resized_image_width >= inky_width and resized_image_height >= inky_height:
+        return rotate_and_crop_image(resized_image, desired_size)
+    elif resized_image_width <= inky_width and resized_image_height <= inky_height:
+        return rotate_and_extend_image(resized_image, desired_size)
     else:
-        return rotate_crop_and_extend_image(original_image, desired_size)
+        return rotate_crop_and_extend_image(resized_image, desired_size)
