@@ -67,6 +67,14 @@ def adjust_image(image_path, desired_size):
     image_width = original_image.size[0]
     image_height = original_image.size[1]
 
+    # resize image to fit the inky_width
+    width_multiplier = inky_width / image_width
+    original_image.resize((int(image_width * width_multiplier), int(image_height * width_multiplier)))
+
+    # update image variables
+    image_width = original_image.size[0]
+    image_height = original_image.size[1]
+
     if image_width >= inky_width and image_height >= inky_height:
         return rotate_and_crop_image(original_image, desired_size)
     elif image_width <= inky_width and image_height <= inky_height:
