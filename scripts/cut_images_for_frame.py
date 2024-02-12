@@ -9,9 +9,11 @@ LANDSCAPE_SIZES = (800, 480)
 
 
 def sanitize_image_name(image_name):
-    replaced_image_name = image_name.replace(" ", "_").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
+    replaced_image_name = image_name.replace(" ", "_").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace(
+        "ß", "ss")
     result = replaced_image_name.encode('UTF-8', 'strict').decode('UTF-8')
     return result
+
 
 def is_landscape(image):
     image_width = image.size[0]

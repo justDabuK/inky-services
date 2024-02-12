@@ -1,17 +1,18 @@
 from inky.auto import auto
 from inky_utility import adjust_image
-from inky_service import ADJUSTED_IMAGE_DIR, ORIGINAL_IMAGE_DIR
+from inky_service import ORIGINAL_IMAGE_DIR
 from os import listdir
 from PIL import Image
 
 
 def adjust_all_images():
+    inky = auto()
     file_list = listdir(ORIGINAL_IMAGE_DIR)
     count = 0
     for file in file_list:
         if count % 10 == 0:
             print(f"{count}/{len(file_list)}")
-        adjust_image(file, ORIGINAL_IMAGE_DIR, ADJUSTED_IMAGE_DIR)
+        adjust_image(ORIGINAL_IMAGE_DIR + file, inky.resolution)
         count += 1
 
 

@@ -6,7 +6,7 @@ from sys import argv
 
 if len(argv) < 2:
     print('to less arguments, usage: ')
-    print('rotate_and_resize.py <image>')
+    print('switch_by_button.py <image>')
     exit(1)
 
 image_dir = argv[1]
