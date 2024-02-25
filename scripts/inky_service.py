@@ -90,7 +90,7 @@ def get_current_image(resolution: List[int]):
             current_image = adjust_image(f"{CURRENT_IMAGE_DIR}current.{file_ending}", resolution)
             current_image.save(desired_image_path)
 
-        return FileResponse(desired_image_path, media_type=f"image/{file_ending}")
+        return FileResponse(desired_image_path, media_type='application/octet-stream', filename=f"current.{file_ending}")
     except Exception as e:
         print(e)
         return {"success": False, "reason": e.__cause__}
