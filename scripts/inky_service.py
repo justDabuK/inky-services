@@ -1,10 +1,11 @@
 from os import listdir, path
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 
 import shutil
 from inky.auto import auto
-from starlette.responses import FileResponse, Response
+from starlette.responses import FileResponse
 from typing import List
 
 from images_in_dir import get_image_choice
@@ -67,7 +68,7 @@ def get_original_image_file(image_name: str):
         return {"success": False, "reason": e.__cause__}
 
 
-@app.get("/images/current/get/download")
+@app.put("/images/current/get/download", responses={200: {"content": {"image/png": {}}}}, response_class=Response)
 def get_current_image(resolution: List[int]):
     try:
         is_current_file_png = path.exists(CURRENT_IMAGE_DIR + "current.png")
