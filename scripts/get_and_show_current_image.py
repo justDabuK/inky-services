@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     response = requests.put(url, json=inky.resolution, stream=True)
     file_ending = response.headers['content-disposition'].split(';')[1].split('.')[-1].replace('"', '')
-    current_image_path = f"~/current_image.{file_ending}"
+    current_image_path = f"/home/pi/current_image.{file_ending}"
 
     with open(current_image_path, "wb") as out_file:
         shutil.copyfileobj(response.raw, out_file)
