@@ -1,13 +1,14 @@
-from os import listdir
+from os import listdir, path
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 import shutil
 from inky.auto import auto
-from starlette.responses import FileResponse
+from starlette.responses import FileResponse, Response
+from typing import List
 
 from images_in_dir import get_image_choice
-from inky_utility import set_image_from_path_and_show
+from inky_utility import set_image_from_path_and_show, adjust_image
 
 inky = auto()
 
@@ -21,8 +22,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ADJUSTED_IMAGE_DIR = "/home/pi/Pictures/adjusted/"
 ORIGINAL_IMAGE_DIR = "/home/pi/Pictures/originals/"
+CURRENT_IMAGE_DIR = "/home/pi/Pictures/current/"
 INKY_SCREEN_RESOLUTION = inky.resolution
 
 
@@ -61,6 +62,21 @@ def get_original_images():
 def get_original_image_file(image_name: str):
     try:
         return FileResponse(ORIGINAL_IMAGE_DIR + image_name, media_type='application/octet-stream', filename=image_name)
+    except Exception as e:
+        print(e)
+        return {"success": False, "reason": e.__cause__}
+
+
+@app.get("/images/current/get/download")
+def get_current_image(resolution: List[int]):
+    try:
+        is_current_file_png = path.exists(CURRENT_IMAGE_DIR + "current.png")
+        if is_current_file_png:
+            current_image = adjust_image(CURRENT_IMAGE_DIR + "current.png", resolution)
+            return Response(current_image, media_type='image/png')
+        else:
+            current_image = adjust_image(CURRENT_IMAGE_DIR + "current.jpg", resolution)
+            return Response(content=current_image, media_type="image/jpeg")
     except Exception as e:
         print(e)
         return {"success": False, "reason": e.__cause__}
