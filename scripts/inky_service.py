@@ -68,16 +68,29 @@ def get_original_image_file(image_name: str):
         return {"success": False, "reason": e.__cause__}
 
 
-@app.put("/images/current/get/download", responses={200: {"content": {"image/png": {}}}}, response_class=Response)
+@app.put("/images/current/get/download")
 def get_current_image(resolution: List[int]):
     try:
         is_current_file_png = path.exists(CURRENT_IMAGE_DIR + "current.png")
+        is_current_file_jpg = path.exists(CURRENT_IMAGE_DIR + "current.jpg")
+        is_current_file_jpeg_with_e = path.exists(CURRENT_IMAGE_DIR + "current.jpeg")
+
+        file_ending = ""
         if is_current_file_png:
-            current_image = adjust_image(CURRENT_IMAGE_DIR + "current.png", resolution)
-            return Response(current_image, media_type='image/png')
+            file_ending = "png"
+        elif is_current_file_jpg:
+            file_ending = "jpg"
+        elif is_current_file_jpeg_with_e:
+            file_ending = "jpeg"
         else:
-            current_image = adjust_image(CURRENT_IMAGE_DIR + "current.jpg", resolution)
-            return Response(content=current_image, media_type="image/jpeg")
+            return {"success": False, "reason": "no current image found"}
+
+        desired_image_path = f"{CURRENT_IMAGE_DIR}current_{resolution[0]}_{resolution[1]}.{file_ending}"
+        if not path.exists(desired_image_path):
+            current_image = adjust_image(f"{CURRENT_IMAGE_DIR}current.{file_ending}", resolution)
+            current_image.save(f"{CURRENT_IMAGE_DIR}current_{resolution[0]}_{resolution[1]}.{file_ending}")
+
+        return FileResponse(desired_image_path, media_type=f"image/{file_ending}")
     except Exception as e:
         print(e)
         return {"success": False, "reason": e.__cause__}
