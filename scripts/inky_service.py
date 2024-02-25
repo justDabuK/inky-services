@@ -88,7 +88,7 @@ def get_current_image(resolution: List[int]):
         desired_image_path = f"{CURRENT_IMAGE_DIR}current_{resolution[0]}_{resolution[1]}.{file_ending}"
         if not path.exists(desired_image_path):
             current_image = adjust_image(f"{CURRENT_IMAGE_DIR}current.{file_ending}", resolution)
-            current_image.save(f"{CURRENT_IMAGE_DIR}current_{resolution[0]}_{resolution[1]}.{file_ending}")
+            current_image.save(desired_image_path)
 
         return FileResponse(desired_image_path, media_type=f"image/{file_ending}")
     except Exception as e:
