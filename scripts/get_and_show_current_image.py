@@ -6,7 +6,7 @@ from inky.auto import auto
 inky = auto()
 
 if __name__ == "__main__":
-    url = "http://192.168.178.30:8000/images/current/get/download"
+    url = "http://192.168.178.29:8000/images/current/get/download"
 
     response = requests.put(url, json=inky.resolution, stream=True)
     file_ending = response.headers['content-disposition'].split(';')[1].split('.')[-1].replace('"', '')
